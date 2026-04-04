@@ -1,0 +1,127 @@
+[
+  {
+    "id": "R001",
+    "dish_name": "Paneer Tikka Masala",
+    "menu_item_id": "M001",
+    "serves": 2,
+    "prep_time_minutes": 15,
+    "cook_time_minutes": 25,
+    "difficulty": "Medium",
+    "steps": [
+      "Cut paneer into 1-inch cubes and marinate in yogurt, turmeric, red chili powder, garam masala, ginger-garlic paste for 30 minutes.",
+      "Grill or pan-fry the marinated paneer until lightly charred on all sides. Set aside.",
+      "Heat oil in a heavy-bottomed pan. Add whole spices: 1 bay leaf, 2 cardamom pods, 1 cinnamon stick.",
+      "Add finely chopped onions and sauté until golden brown (8-10 minutes).",
+      "Add ginger-garlic paste and cook for 2 minutes until raw smell disappears.",
+      "Add pureed tomatoes, salt, and spices. Cook until oil separates (10 minutes).",
+      "Pour in heavy cream and simmer for 5 minutes to create the sauce.",
+      "Add grilled paneer, stir gently, and simmer for 5 more minutes.",
+      "Garnish with fresh cream, coriander leaves, and butter. Serve hot with naan or rice."
+    ],
+    "chef_tips": [
+      "Use full-fat yogurt for the marinade to keep paneer tender.",
+      "Don't skip charring the paneer — it adds a smoky depth to the sauce.",
+      "Kashmiri red chili powder gives the signature colour without excessive heat."
+    ]
+  },
+  {
+    "id": "R002",
+    "dish_name": "Chicken Biryani",
+    "menu_item_id": "M004",
+    "serves": 4,
+    "prep_time_minutes": 30,
+    "cook_time_minutes": 60,
+    "difficulty": "Hard",
+    "steps": [
+      "Marinate chicken in yogurt, spices, saffron-infused milk, fried onions, and mint for at least 2 hours.",
+      "Wash and soak basmati rice for 30 minutes.",
+      "Parboil rice with whole spices (bay leaf, star anise, cloves, cardamom) until 70% cooked. Drain.",
+      "In a heavy pot, spread the marinated chicken as the base layer.",
+      "Layer parboiled rice over the chicken evenly.",
+      "Drizzle saffron milk, fried onions, mint leaves, and ghee over the top layer.",
+      "Seal the pot tightly with dough or foil. Cook on high for 5 minutes, then low for 25 minutes (dum cooking).",
+      "Rest for 10 minutes before opening. Gently mix from the sides.",
+      "Serve with raita, mirchi salan, and lemon wedges."
+    ],
+    "chef_tips": [
+      "The dum (steam) cooking is critical — do not open the lid during this stage.",
+      "Fried onions (birista) must be golden and crispy, not dark.",
+      "Saffron soaked in warm milk for 15 minutes gives the best colour and aroma."
+    ]
+  },
+  {
+    "id": "R003",
+    "dish_name": "Mushroom Risotto",
+    "menu_item_id": "M011",
+    "serves": 2,
+    "prep_time_minutes": 10,
+    "cook_time_minutes": 35,
+    "difficulty": "Medium",
+    "steps": [
+      "Warm 1 litre vegetable stock in a separate pot and keep at a gentle simmer.",
+      "In a wide pan, heat butter and olive oil. Sauté shallots and garlic until translucent.",
+      "Add Arborio rice and toast for 2 minutes, stirring constantly, until edges are translucent.",
+      "Add white wine and stir until absorbed.",
+      "Add warm stock one ladle at a time, stirring continuously. Add next ladle only when previous is absorbed.",
+      "Meanwhile, sauté mixed wild mushrooms in butter with thyme and garlic until golden.",
+      "After 20-25 minutes, rice should be al dente and creamy. Remove from heat.",
+      "Stir in cold butter and grated Parmesan vigorously (mantecatura) for creaminess.",
+      "Plate, top with sautéed mushrooms, shaved Parmesan, truffle oil, and fresh thyme."
+    ],
+    "chef_tips": [
+      "Never rinse Arborio rice — you need the surface starch for creaminess.",
+      "Stock must be warm; cold stock shocks the rice and breaks the cooking.",
+      "The mantecatura (butter + cheese off heat) is what makes restaurant risotto impossibly creamy."
+    ]
+  },
+  {
+    "id": "R004",
+    "dish_name": "Dal Makhani",
+    "menu_item_id": "M006",
+    "serves": 4,
+    "prep_time_minutes": 15,
+    "cook_time_minutes": 480,
+    "difficulty": "Easy",
+    "steps": [
+      "Wash and soak 200g black lentils and 50g kidney beans overnight.",
+      "Pressure cook soaked lentils and beans with water, salt, and a pinch of baking soda for 6-7 whistles until completely soft.",
+      "In a separate pan, melt butter. Add cumin seeds, bay leaf, and dried chili.",
+      "Add finely chopped onions and cook until dark golden (15 minutes).",
+      "Add ginger-garlic paste, cook 3 minutes. Add tomato puree and spices, cook until oil separates.",
+      "Add the cooked lentils to the tomato base. Mix well and simmer on very low heat.",
+      "For authentic flavour, simmer for 4-6 hours, stirring occasionally and adding water as needed.",
+      "Add heavy cream in the last 30 minutes. Adjust salt.",
+      "Finish with a knob of butter and fresh coriander. Serve with naan or rice."
+    ],
+    "chef_tips": [
+      "The longer it simmers, the better — overnight slow cooking is ideal.",
+      "A charcoal smoking technique (dhungar) adds authentic dhaba-style smoky flavour.",
+      "Use Amul butter for the most authentic taste."
+    ]
+  },
+  {
+    "id": "R005",
+    "dish_name": "Chocolate Lava Cake",
+    "menu_item_id": "M009",
+    "serves": 4,
+    "prep_time_minutes": 15,
+    "cook_time_minutes": 12,
+    "difficulty": "Medium",
+    "steps": [
+      "Preheat oven to 220°C (425°F). Grease four ramekins with butter and dust with cocoa powder.",
+      "Melt 200g dark chocolate (70% cocoa) and 150g butter together in a double boiler. Cool slightly.",
+      "Whisk 4 eggs and 4 yolks with 100g sugar until pale and thick.",
+      "Fold the chocolate mixture into the egg mixture gently.",
+      "Sift in 50g plain flour and fold until just combined — do not overmix.",
+      "Divide batter equally into prepared ramekins. Can be refrigerated at this point for up to 24 hours.",
+      "Bake for 10-12 minutes until edges are set but centre still jiggles slightly.",
+      "Rest for 1 minute, then invert onto serving plates.",
+      "Serve immediately with vanilla ice cream and fresh berries."
+    ],
+    "chef_tips": [
+      "The bake time is crucial — 10 min for very runny, 12 min for a fudgy centre.",
+      "Good quality chocolate makes all the difference — use 70%+ cocoa.",
+      "Ramekins can be prepped hours ahead and refrigerated; bake straight from the fridge, adding 1 minute."
+    ]
+  }
+]

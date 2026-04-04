@@ -1,0 +1,312 @@
+[
+  {
+    "menu_item_id": "M001",
+    "dish_name": "Paneer Tikka Masala",
+    "serving_size_g": 350,
+    "calories": 485,
+    "macros": {
+      "protein_g": 22,
+      "carbohydrates_g": 18,
+      "fat_g": 35,
+      "fiber_g": 3,
+      "sugar_g": 8
+    },
+    "micronutrients": {
+      "sodium_mg": 720,
+      "calcium_mg": 380,
+      "iron_mg": 3.2,
+      "vitamin_c_mg": 12
+    },
+    "allergens": ["dairy"],
+    "dietary_flags": {
+      "vegetarian": true,
+      "vegan": false,
+      "gluten_free": true,
+      "nut_free": true,
+      "halal": true
+    },
+    "health_notes": "High in calcium and protein from paneer. Moderate calorie dish suitable for balanced diets. Cream-based sauce is high in saturated fat."
+  },
+  {
+    "menu_item_id": "M002",
+    "dish_name": "Grilled Atlantic Salmon",
+    "serving_size_g": 380,
+    "calories": 520,
+    "macros": {
+      "protein_g": 42,
+      "carbohydrates_g": 22,
+      "fat_g": 28,
+      "fiber_g": 4,
+      "sugar_g": 2
+    },
+    "micronutrients": {
+      "sodium_mg": 580,
+      "calcium_mg": 90,
+      "iron_mg": 1.8,
+      "vitamin_d_mcg": 18,
+      "omega3_g": 3.2
+    },
+    "allergens": ["fish", "dairy"],
+    "dietary_flags": {
+      "vegetarian": false,
+      "vegan": false,
+      "gluten_free": true,
+      "nut_free": true,
+      "halal": false
+    },
+    "health_notes": "Excellent source of omega-3 fatty acids and high-quality protein. Rich in vitamin D. Heart-healthy choice."
+  },
+  {
+    "menu_item_id": "M003",
+    "dish_name": "Margherita Pizza",
+    "serving_size_g": 300,
+    "calories": 680,
+    "macros": {
+      "protein_g": 28,
+      "carbohydrates_g": 82,
+      "fat_g": 24,
+      "fiber_g": 3,
+      "sugar_g": 6
+    },
+    "micronutrients": {
+      "sodium_mg": 890,
+      "calcium_mg": 420,
+      "iron_mg": 4.1
+    },
+    "allergens": ["gluten", "dairy"],
+    "dietary_flags": {
+      "vegetarian": true,
+      "vegan": false,
+      "gluten_free": false,
+      "nut_free": true,
+      "halal": true
+    },
+    "health_notes": "High in refined carbohydrates. Good source of calcium from mozzarella. Can be ordered with thin crust to reduce calories."
+  },
+  {
+    "menu_item_id": "M004",
+    "dish_name": "Chicken Biryani",
+    "serving_size_g": 450,
+    "calories": 620,
+    "macros": {
+      "protein_g": 38,
+      "carbohydrates_g": 72,
+      "fat_g": 18,
+      "fiber_g": 2,
+      "sugar_g": 4
+    },
+    "micronutrients": {
+      "sodium_mg": 840,
+      "calcium_mg": 110,
+      "iron_mg": 4.8
+    },
+    "allergens": ["dairy"],
+    "dietary_flags": {
+      "vegetarian": false,
+      "vegan": false,
+      "gluten_free": true,
+      "nut_free": false,
+      "halal": true
+    },
+    "health_notes": "Balanced meal with protein and complex carbohydrates. Contains cashews and saffron. Moderate calorie density."
+  },
+  {
+    "menu_item_id": "M005",
+    "dish_name": "Caesar Salad",
+    "serving_size_g": 280,
+    "calories": 320,
+    "macros": {
+      "protein_g": 14,
+      "carbohydrates_g": 18,
+      "fat_g": 22,
+      "fiber_g": 3,
+      "sugar_g": 2
+    },
+    "micronutrients": {
+      "sodium_mg": 760,
+      "calcium_mg": 220,
+      "iron_mg": 2.1,
+      "vitamin_k_mcg": 85
+    },
+    "allergens": ["gluten", "dairy", "fish", "eggs"],
+    "dietary_flags": {
+      "vegetarian": false,
+      "vegan": false,
+      "gluten_free": false,
+      "nut_free": true,
+      "halal": false
+    },
+    "health_notes": "Rich in vitamin K and folate from romaine. Dressing is calorie-dense. Can be made without anchovies for pescatarians."
+  },
+  {
+    "menu_item_id": "M006",
+    "dish_name": "Dal Makhani",
+    "serving_size_g": 300,
+    "calories": 380,
+    "macros": {
+      "protein_g": 18,
+      "carbohydrates_g": 42,
+      "fat_g": 16,
+      "fiber_g": 12,
+      "sugar_g": 5
+    },
+    "micronutrients": {
+      "sodium_mg": 620,
+      "calcium_mg": 140,
+      "iron_mg": 6.8,
+      "potassium_mg": 580
+    },
+    "allergens": ["dairy"],
+    "dietary_flags": {
+      "vegetarian": true,
+      "vegan": false,
+      "gluten_free": true,
+      "nut_free": true,
+      "halal": true
+    },
+    "health_notes": "Excellent source of plant protein and dietary fiber. High in iron and potassium. Low glycemic index from lentils."
+  },
+  {
+    "menu_item_id": "M007",
+    "dish_name": "Beef Tenderloin Steak",
+    "serving_size_g": 420,
+    "calories": 740,
+    "macros": {
+      "protein_g": 52,
+      "carbohydrates_g": 28,
+      "fat_g": 42,
+      "fiber_g": 3,
+      "sugar_g": 2
+    },
+    "micronutrients": {
+      "sodium_mg": 680,
+      "calcium_mg": 80,
+      "iron_mg": 5.6,
+      "zinc_mg": 8.2,
+      "vitamin_b12_mcg": 4.8
+    },
+    "allergens": ["dairy"],
+    "dietary_flags": {
+      "vegetarian": false,
+      "vegan": false,
+      "gluten_free": true,
+      "nut_free": true,
+      "halal": false
+    },
+    "health_notes": "High in complete protein, iron, zinc, and B12. High saturated fat content. Suitable for low-carb diets."
+  },
+  {
+    "menu_item_id": "M008",
+    "dish_name": "Vegan Buddha Bowl",
+    "serving_size_g": 400,
+    "calories": 480,
+    "macros": {
+      "protein_g": 18,
+      "carbohydrates_g": 58,
+      "fat_g": 20,
+      "fiber_g": 14,
+      "sugar_g": 6
+    },
+    "micronutrients": {
+      "sodium_mg": 420,
+      "calcium_mg": 120,
+      "iron_mg": 4.2,
+      "vitamin_c_mg": 28,
+      "folate_mcg": 180
+    },
+    "allergens": ["sesame"],
+    "dietary_flags": {
+      "vegetarian": true,
+      "vegan": true,
+      "gluten_free": true,
+      "nut_free": true,
+      "halal": true
+    },
+    "health_notes": "Nutrient-dense plant-based meal. High fiber supports digestive health. Complete protein from quinoa + edamame combination. Avocado provides heart-healthy monounsaturated fats."
+  },
+  {
+    "menu_item_id": "M009",
+    "dish_name": "Chocolate Lava Cake",
+    "serving_size_g": 180,
+    "calories": 520,
+    "macros": {
+      "protein_g": 8,
+      "carbohydrates_g": 52,
+      "fat_g": 32,
+      "fiber_g": 3,
+      "sugar_g": 38
+    },
+    "micronutrients": {
+      "sodium_mg": 180,
+      "calcium_mg": 60,
+      "iron_mg": 4.8,
+      "magnesium_mg": 72
+    },
+    "allergens": ["gluten", "dairy", "eggs"],
+    "dietary_flags": {
+      "vegetarian": true,
+      "vegan": false,
+      "gluten_free": false,
+      "nut_free": true,
+      "halal": true
+    },
+    "health_notes": "Indulgent dessert, high in sugar and saturated fat. Dark chocolate (70%+) provides antioxidants and iron. Occasional treat."
+  },
+  {
+    "menu_item_id": "M010",
+    "dish_name": "Mango Lassi",
+    "serving_size_g": 300,
+    "calories": 185,
+    "macros": {
+      "protein_g": 5,
+      "carbohydrates_g": 32,
+      "fat_g": 4,
+      "fiber_g": 1,
+      "sugar_g": 28
+    },
+    "micronutrients": {
+      "sodium_mg": 80,
+      "calcium_mg": 160,
+      "vitamin_c_mg": 30,
+      "vitamin_a_mcg": 45
+    },
+    "allergens": ["dairy"],
+    "dietary_flags": {
+      "vegetarian": true,
+      "vegan": false,
+      "gluten_free": true,
+      "nut_free": true,
+      "halal": true
+    },
+    "health_notes": "Good source of probiotics from yogurt. Mango provides vitamin C and A. Naturally high in sugar — choose unsweetened variant if preferred."
+  },
+  {
+    "menu_item_id": "M011",
+    "dish_name": "Mushroom Risotto",
+    "serving_size_g": 380,
+    "calories": 580,
+    "macros": {
+      "protein_g": 16,
+      "carbohydrates_g": 68,
+      "fat_g": 24,
+      "fiber_g": 3,
+      "sugar_g": 3
+    },
+    "micronutrients": {
+      "sodium_mg": 680,
+      "calcium_mg": 280,
+      "iron_mg": 3.4,
+      "selenium_mcg": 22,
+      "vitamin_d_mcg": 4
+    },
+    "allergens": ["dairy"],
+    "dietary_flags": {
+      "vegetarian": true,
+      "vegan": false,
+      "gluten_free": true,
+      "nut_free": true,
+      "halal": true
+    },
+    "health_notes": "Wild mushrooms provide selenium and vitamin D. High calorie from butter and Parmesan. Arborio rice has a higher GI than brown rice."
+  }
+]
