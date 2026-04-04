@@ -211,36 +211,49 @@ class FnBWorkflow:
         response = {
             "success": True,
             "query": query,
-            "reformed_query": result_state.reformed_query,
-            "intent": result_state.intent,
+            "reformed_query": result_state.get("reformed_query", query) if isinstance(result_state, dict) else getattr(result_state, "reformed_query", query),
+            "intent": result_state.get("intent", "unknown") if isinstance(result_state, dict) else getattr(result_state, "intent", "unknown"),
             "execution_time_seconds": round(elapsed_time, 2)
         }
 
         # Check if blocked
-        if not result_state.input_guardrail.passed:
-            response.update({
-                "success": False,
-                "status": "BLOCKED",
-                "reason": result_state.input_guardrail.reason,
-                "message": result_state.blocked_message
-            })
-            return response
+        input_guardrail = result_state.get("input_guardrail") if isinstance(result_state, dict) else getattr(result_state, "input_guardrail", None)
+        if input_guardrail:
+            passed = input_guardrail.get("passed", True) if isinstance(input_guardrail, dict) else getattr(input_guardrail, "passed", True)
+            if not passed:
+                reason = input_guardrail.get("reason", "Unknown") if isinstance(input_guardrail, dict) else getattr(input_guardrail, "reason", "Unknown")
+                message = result_state.get("blocked_message", "") if isinstance(result_state, dict) else getattr(result_state, "blocked_message", "")
+                response.update({
+                    "success": False,
+                    "status": "BLOCKED",
+                    "reason": reason,
+                    "message": message
+                })
+                return response
 
         # Check if redacted
-        if not result_state.output_guardrail.passed:
-            response.update({
-                "success": False,
-                "status": "REDACTED",
-                "reason": result_state.output_guardrail.reason
-            })
-            return response
+        output_guardrail = result_state.get("output_guardrail") if isinstance(result_state, dict) else getattr(result_state, "output_guardrail", None)
+        if output_guardrail:
+            passed = output_guardrail.get("passed", True) if isinstance(output_guardrail, dict) else getattr(output_guardrail, "passed", True)
+            if not passed:
+                reason = output_guardrail.get("reason", "Unknown") if isinstance(output_guardrail, dict) else getattr(output_guardrail, "reason", "Unknown")
+                response.update({
+                    "success": False,
+                    "status": "REDACTED",
+                    "reason": reason
+                })
+                return response
 
         # Success response
-        if result_state.subagent_results:
+        subagent_results = result_state.get("subagent_results", []) if isinstance(result_state, dict) else getattr(result_state, "subagent_results", [])
+        if subagent_results:
+            first_result = subagent_results[0]
+            output = first_result.get("output", "") if isinstance(first_result, dict) else first_result.output
+            citations = first_result.get("citations", []) if isinstance(first_result, dict) else first_result.citations
             response.update({
                 "status": "SUCCESS",
-                "answer": result_state.subagent_results[0].output,
-                "citations": result_state.subagent_results[0].citations,
+                "answer": output,
+                "citations": citations,
                 "agents_used": [r.agent_name for r in result_state.subagent_results if r.success]
             })
 

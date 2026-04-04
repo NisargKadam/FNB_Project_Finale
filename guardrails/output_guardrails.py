@@ -27,7 +27,7 @@ CITATIONS:
 Does the response contain claims NOT supported by the citations? Respond with "VALID" or "HALLUCINATION" + reason."""
             
             response_obj = self.client.chat.completions.create(
-                model="gpt-4-mini",
+                model="gpt-4o-mini",
                 max_tokens=100,
                 messages=[{"role": "user", "content": validation_prompt}]
             )

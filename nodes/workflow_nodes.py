@@ -16,7 +16,7 @@ class QueryReformationNode:
         """Rewrite query for clarity."""
         try:
             response = self.client.chat.completions.create(
-                model="gpt-4-mini",
+                model="gpt-4o-mini",
                 max_tokens=200,
                 messages=[
                     {
@@ -49,7 +49,7 @@ class OrchestratorNode:
         """Classify intent and route to appropriate agents."""
         try:
             response = self.client.chat.completions.create(
-                model="gpt-4-mini",
+                model="gpt-4o-mini",
                 max_tokens=300,
                 messages=[
                     {
@@ -113,7 +113,7 @@ class ResponseAggregationNode:
                 all_citations.extend(r.citations)
 
             response = self.client.chat.completions.create(
-                model="gpt-4-mini",
+                model="gpt-4o-mini",
                 max_tokens=1000,
                 messages=[
                     {
@@ -175,7 +175,7 @@ OVERALL: [average of above]
 FEEDBACK: [brief assessment]"""
 
             response = self.client.chat.completions.create(
-                model="gpt-4-mini",
+                model="gpt-4o-mini",
                 max_tokens=200,
                 messages=[{"role": "user", "content": evaluation_prompt}]
             )
@@ -236,7 +236,7 @@ If adjustment is needed, rewrite the response. Otherwise, keep it as-is but add 
 Respond with the revised response or original if no changes needed."""
 
             response = self.client.chat.completions.create(
-                model="gpt-4-mini",
+                model="gpt-4o-mini",
                 max_tokens=1000,
                 messages=[{"role": "user", "content": tone_prompt}]
             )

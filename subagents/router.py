@@ -129,7 +129,7 @@ class SubAgentRouter:
             
             # Call the agent with the query
             response = self.client.chat.completions.create(
-                model="gpt-4-mini",
+                model="gpt-4o-mini",
                 max_tokens=1000,
                 messages=[
                     {

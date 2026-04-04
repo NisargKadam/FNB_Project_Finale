@@ -23,7 +23,7 @@ class TemplateAgent:
     def __init__(self):
         """Initialize the agent with LLM client."""
         self.client = get_client()
-        self.model = "gpt-4-mini"
+        self.model = "gpt-4o-mini"
 
     def execute(self, query: str, context: dict = None) -> SubAgentResult:
         """

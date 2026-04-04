@@ -44,7 +44,7 @@ class InputGuardrails:
         """Use LLM to verify query is food & beverage related."""
         try:
             response = self.client.chat.completions.create(
-                model="gpt-4-mini",
+                model="gpt-4o-mini",
                 max_tokens=100,
                 messages=[
                     {
