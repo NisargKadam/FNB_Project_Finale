@@ -250,15 +250,23 @@ class FnBWorkflow:
             first_result = subagent_results[0]
             output = first_result.get("output", "") if isinstance(first_result, dict) else first_result.output
             citations = first_result.get("citations", []) if isinstance(first_result, dict) else first_result.citations
+            agents_used = [
+                (r.get("agent_name", "") if isinstance(r, dict) else r.agent_name)
+                for r in subagent_results
+                if (r.get("success", False) if isinstance(r, dict) else r.success)
+            ]
             response.update({
                 "status": "SUCCESS",
                 "answer": output,
                 "citations": citations,
-                "agents_used": [
-                    (r.get("agent_name", "") if isinstance(r, dict) else r.agent_name)
-                    for r in subagent_results
-                    if (r.get("success", False) if isinstance(r, dict) else r.success)
-                ]
+                "agents_used": agents_used,
+            })
+        else:
+            response.update({
+                "status": "SUCCESS",
+                "answer": "I processed your query but no agent returned a result. Please try rephrasing.",
+                "citations": [],
+                "agents_used": [],
             })
 
         logger.info(f"\n{'='*60}")

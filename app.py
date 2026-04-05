@@ -319,10 +319,8 @@ if "result" in st.session_state:
         # ── Answer ───────────────────────────────────────────────────────────
         st.markdown("#### 💬 Answer")
         answer_text = result.get("answer", "No answer generated.")
-        st.markdown(
-            f'<div class="answer-card">{answer_text}</div>',
-            unsafe_allow_html=True,
-        )
+        with st.container(border=True):
+            st.markdown(answer_text)
 
         # ── Citations ────────────────────────────────────────────────────────
         citations = result.get("citations", [])
