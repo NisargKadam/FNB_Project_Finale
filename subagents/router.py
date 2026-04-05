@@ -1,7 +1,7 @@
 """Subagent Router - Master orchestrator for 20+ specialized agents"""
 from typing import Optional, Any
 from graph.state import FnBState, SubAgentResult
-from utils.llm_client import get_client
+from utils.llm_client import get_client, MODEL
 import logging
 import asyncio
 from concurrent.futures import ThreadPoolExecutor
@@ -129,7 +129,7 @@ class SubAgentRouter:
             
             # Call the agent with the query
             response = self.client.chat.completions.create(
-                model="gpt-4o-mini",
+                model=MODEL,
                 max_tokens=1000,
                 messages=[
                     {

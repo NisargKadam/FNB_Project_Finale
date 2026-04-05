@@ -1,5 +1,5 @@
 """Template for creating new specialized subagents"""
-from utils.llm_client import get_client
+from utils.llm_client import get_client, MODEL
 from graph.state import SubAgentResult
 import logging
 
@@ -23,7 +23,7 @@ class TemplateAgent:
     def __init__(self):
         """Initialize the agent with LLM client."""
         self.client = get_client()
-        self.model = "gpt-4o-mini"
+        self.model = MODEL
 
     def execute(self, query: str, context: dict = None) -> SubAgentResult:
         """

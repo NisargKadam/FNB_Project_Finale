@@ -2,7 +2,7 @@
 import re
 from typing import Optional
 from graph.state import FnBState, GuardrailVerdict
-from utils.llm_client import get_client
+from utils.llm_client import get_client, MODEL
 import logging
 
 logger = logging.getLogger(__name__)
@@ -44,7 +44,7 @@ class InputGuardrails:
         """Use LLM to verify query is food & beverage related."""
         try:
             response = self.client.chat.completions.create(
-                model="gpt-4o-mini",
+                model=MODEL,
                 max_tokens=100,
                 messages=[
                     {

@@ -179,9 +179,14 @@ with st.sidebar:
 
     st.markdown("---")
     st.markdown(
-        '<p style="color:#6b7280;font-size:0.75rem;">'
-        "Powered by GPT-4o-mini + LangGraph<br>"
-        "© 2025 F&B AI System"
+        '<p style="color:#6b7280;font-size:0.75rem;line-height:1.6;">'
+        "Powered by GPT + LangGraph<br>"
+        "© 2025 F&amp;B AI System<br><br>"
+        '<b style="color:#a8b2c1;">Built by</b> '
+        '<a href="https://www.linkedin.com/in/nisargkadam" target="_blank" '
+        'style="color:#60a5fa;text-decoration:none;">Nisarg Kadam</a><br>'
+        '<a href="mailto:nisargkadam23@gmail.com" '
+        'style="color:#60a5fa;text-decoration:none;">nisargkadam23@gmail.com</a>'
         "</p>",
         unsafe_allow_html=True,
     )
@@ -207,10 +212,10 @@ SAMPLES = [
 
 st.markdown('<p class="sample-label">💡 Try a sample query:</p>', unsafe_allow_html=True)
 sample_cols = st.columns(3)
-chosen_sample = None
 for i, sample in enumerate(SAMPLES):
     if sample_cols[i % 3].button(sample, use_container_width=True, key=f"sample_{i}"):
-        chosen_sample = sample
+        st.session_state["query_box"] = sample
+        st.rerun()
 
 # Query input
 st.markdown("#### Your Question")
@@ -218,7 +223,6 @@ query_input = st.text_input(
     label="Query",
     label_visibility="collapsed",
     placeholder="e.g. What are your vegan options?",
-    value=chosen_sample or st.session_state.get("last_query", ""),
     key="query_box",
 )
 
