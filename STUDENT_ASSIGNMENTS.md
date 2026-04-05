@@ -30,7 +30,53 @@
 | 18 | Jayesh Hariba Thorat | comparison_agent | Compare multiple items |
 | 19 | Khalid Khan | sustainability_agent | Eco-friendly and sustainable options |
 
-**Bonus Agent (For Future):** feedback_agent - Reviews and customer feedback
+**Note:** The full pipeline (guardrails, orchestrator, graph, Streamlit UI) is already built.
+You only need to implement your agent file and register it in `subagents/router.py`.
+
+---
+
+## 🖥️ Try the Live UI First
+
+Run the Streamlit UI to see the complete pipeline in action before you start coding:
+
+```bash
+streamlit run app.py
+```
+
+The UI shows:
+- Pipeline stages with status indicators
+- Which agents were invoked
+- Answer with citations
+- Quality scores and timing
+- Full pipeline trace (expandable)
+
+Your agent will appear in the **Agents Used** badge once implemented and registered.
+
+---
+
+## 📋 Per-Student Task Details
+
+| Student | Agent | Data Source | Key Test Queries |
+|---------|-------|-------------|-----------------|
+| Sethumeenakshi | recipe_agent | `data/recipes.json` | "How do I make Biryani?" |
+| Abbiramy V Ra | nutrition_agent | `data/nutritional_info.json` | "Calories in Paneer Tikka?" |
+| Thiagaraj Karthikeyan | menu_agent | `data/menu_items.json` | "What dishes are available?" |
+| Tushar Bambal | recommendation_agent | `data/menu_items.json` | "Suggest a romantic dinner dish" |
+| Sindhura Veerabomma | dietary_agent | `data/menu_items.json` | "What vegan options do you have?" |
+| Kavi Suruthi | allergen_agent | `data/menu_items.json` + `nutritional_info.json` | "I'm allergic to dairy. What can I eat?" |
+| Rasika Sudhir Rasal | pricing_agent | `data/menu_items.json` | "What can I get for under $15?" |
+| Sharandeep Singh | inventory_agent | `data/menu_items.json` | "Is Pad Thai available today?" |
+| Varshitha Vuyyuru | preparation_time_agent | `data/recipes.json` | "Which dish is quickest to make?" |
+| Renuka Agarwal | substitution_agent | `data/recipes.json` | "Can I substitute cream in Paneer Tikka?" |
+| Girija Selvakumar | cuisine_agent | `data/menu_items.json` | "What Indian dishes do you have?" |
+| Sushant Kamble | seasonal_agent | `data/menu_items.json` | "What's seasonal right now?" |
+| Hareharan KM | beverage_pairing_agent | `data/menu_items.json` | "What wine pairs with Beef Tenderloin?" |
+| Uday Bhanu Bethi | nutrition_calculator_agent | `data/nutritional_info.json` | "Total calories for Dal Makhani + Mango Lassi?" |
+| Jaya Raju Ganta | restaurant_info_agent | Custom data (create `data/restaurant.json`) | "What are your opening hours?" |
+| Sripad Mhaddalkar | order_history_agent | Custom data (create `data/orders.json`) | "What's the status of order #1003?" |
+| Jogula Satya Aditya | trending_agent | `data/menu_items.json` + popularity scores | "What are your most popular dishes?" |
+| Jayesh Hariba Thorat | comparison_agent | `data/menu_items.json` + `nutritional_info.json` | "Compare Caesar Salad and Buddha Bowl" |
+| Khalid Khan | sustainability_agent | `data/menu_items.json` | "What's your most eco-friendly dish?" |
 
 ---
 
@@ -66,7 +112,7 @@ pip install -r requirements.txt
 
 # Create .env file with your API key
 copy .env.example .env
-# Edit .env and add: ANTHROPIC_API_KEY=sk-...
+# Edit .env and add: OPENAI_API_KEY=sk-...
 ```
 
 ### STEP 3: Understand the Project Structure
@@ -143,7 +189,7 @@ class YourAgentName(TemplateAgent):
             
             # Example: Simple LLM call
             response = self.client.chat.completions.create(
-                model="gpt-4-mini",
+                model="gpt-4o-mini",
                 max_tokens=1000,
                 messages=[
                     {
@@ -163,7 +209,7 @@ Provide a helpful, accurate response that:
                 ]
             )
 
-            output = response.content[0].text.strip()
+            output = response.choices[0].message.content.strip()
             
             return SubAgentResult(
                 agent_name=self.agent_name,
@@ -197,13 +243,15 @@ def execute(self, query: str, context: dict = None) -> SubAgentResult:
     context_text = self._format_data(data)
     
     # 3. Generate response with context
-    response = self.client.messages.create(
+    response = self.client.chat.completions.create(
+        model="gpt-4o-mini",
+        max_tokens=1000,
         messages=[{"role": "user", "content": f"{context_text}\n\nQuestion: {query}"}]
     )
     
     return SubAgentResult(
         agent_name=self.agent_name,
-        output=response.content[0].text.strip(),
+        output=response.choices[0].message.content.strip(),
         success=True
     )
 
@@ -527,10 +575,10 @@ venv\Scripts\activate
 pip install -r requirements.txt
 ```
 
-### "Anthropic API key not found"
+### "OpenAI API key not found"
 ```bash
 # Create .env file with your key
-echo ANTHROPIC_API_KEY=sk-... > .env
+echo OPENAI_API_KEY=sk-... > .env
 ```
 
 ### "Agent not being invoked"
@@ -674,3 +722,29 @@ git push origin feature/your_agent_name
 ```
 
 **Good luck! You've got this! 🚀**
+
+---
+
+## 🚂 Deploying to Railway (Instructor Only)
+
+The project is configured to deploy automatically via `railway.toml`.
+
+```bash
+# 1. Install Railway CLI
+npm install -g @railway/cli
+
+# 2. Login
+railway login
+
+# 3. Link to your Railway project
+railway link
+
+# 4. Add your OpenAI key as an environment variable in Railway dashboard:
+#    Settings → Variables → Add: OPENAI_API_KEY = sk-...
+
+# 5. Deploy
+railway up
+```
+
+The app will be available at your Railway-generated URL.
+Students can use the live URL to test their agents without running locally.

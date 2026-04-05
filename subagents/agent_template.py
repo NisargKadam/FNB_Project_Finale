@@ -310,7 +310,7 @@ Build on the previous context and provide additional insights or analysis."""
             
             return SubAgentResult(
                 agent_name="state_aware_agent",
-                output=response.content[0].text.strip(),
+                output=response.choices[0].message.content.strip(),
                 success=True,
                 error=""
             )
