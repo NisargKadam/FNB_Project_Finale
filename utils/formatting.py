@@ -6,6 +6,7 @@ def print_header():
     print("\n" + "=" * 65)
     print("   F&B Multi-Agent AI System  |  Powered by GPT-4o-mini + LangGraph")
     print("=" * 65 + "\n")
+    print("Sushant")
 
 
 def print_pipeline_step(step: str, detail: str = ""):
