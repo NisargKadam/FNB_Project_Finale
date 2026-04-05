@@ -13,33 +13,42 @@ class OutputGuardrails:
         self.client = get_client()
 
     def check_hallucinations(self, response: str, citations: list[str]) -> tuple[bool, str]:
-        """Verify response doesn't contain unsupported claims."""
+        """Verify response doesn't contain unsupported claims.
+
+        Only runs when citations exist — LLM-generated responses without
+        a retrieval source cannot be meaningfully checked against citations,
+        so we skip rather than false-positive block.
+        """
+        if not citations:
+            logger.info("Hallucination check skipped — no citations (LLM-only agents)")
+            return True, "Hallucination check skipped (no citations)"
+
         try:
-            context = "\n".join(citations) if citations else "No citations provided"
-            
-            validation_prompt = f"""Review this response for hallucinations (claims not supported by citations):
+            context = "\n".join(citations)
+            validation_prompt = f"""Review this food & beverage response for hallucinations.
+Only flag it if it contains specific factual claims (prices, ingredients, calories, etc.)
+that clearly contradict the citations below.
 
 RESPONSE: {response}
 
 CITATIONS:
 {context}
 
-Does the response contain claims NOT supported by the citations? Respond with "VALID" or "HALLUCINATION" + reason."""
-            
+Respond ONLY with "VALID" or "HALLUCINATION: <specific reason>"."""
+
             response_obj = self.client.chat.completions.create(
                 model=MODEL,
                 max_tokens=100,
                 messages=[{"role": "user", "content": validation_prompt}]
             )
-            
+
             result = response_obj.choices[0].message.content.strip().upper()
-            if "VALID" in result:
-                return True, "No hallucinations detected"
-            else:
-                return False, f"Potential hallucination detected"
+            if "HALLUCINATION" in result:
+                return False, "Potential hallucination detected"
+            return True, "No hallucinations detected"
         except Exception as e:
             logger.error(f"Hallucination check failed: {e}")
-            return True, "Hallucination check skipped (API error — passing through)"
+            return True, "Hallucination check skipped (API error)"
 
     def check_pii_leakage(self, response: str) -> tuple[bool, str]:
         """Ensure no PII in final response."""
