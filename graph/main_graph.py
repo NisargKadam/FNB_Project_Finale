@@ -265,10 +265,14 @@ class FnBWorkflow:
         return response
 
 
-# Initialize and export
-workflow_instance = FnBWorkflow()
+# Lazy-initialized — deferred until first query so Railway env vars
+# are guaranteed to be injected before OpenAI clients are created.
+_workflow_instance = None
 
 
 def execute_query(query: str) -> dict:
     """Simple interface to execute a query."""
-    return workflow_instance.run(query)
+    global _workflow_instance
+    if _workflow_instance is None:
+        _workflow_instance = FnBWorkflow()
+    return _workflow_instance.run(query)
