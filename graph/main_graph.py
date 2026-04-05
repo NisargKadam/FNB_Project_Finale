@@ -254,7 +254,11 @@ class FnBWorkflow:
                 "status": "SUCCESS",
                 "answer": output,
                 "citations": citations,
-                "agents_used": [r.agent_name for r in result_state.subagent_results if r.success]
+                "agents_used": [
+                    (r.get("agent_name", "") if isinstance(r, dict) else r.agent_name)
+                    for r in subagent_results
+                    if (r.get("success", False) if isinstance(r, dict) else r.success)
+                ]
             })
 
         logger.info(f"\n{'='*60}")
