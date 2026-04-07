@@ -48,6 +48,18 @@ class OrchestratorNode:
     def process(self, state: FnBState) -> FnBState:
         """Classify intent and route to appropriate agents."""
         try:
+            # Smart routing: Check for specific intents first (before LLM)
+            query_lower = state.reformed_query.lower()
+            
+            # Allergen/Allergy queries - use ONLY allergen_agent
+            allergen_keywords = ["allerg", "intolerance", "dairy-free", "gluten-free", "nut-free", "vegan", "vegetarian", "lactose"]
+            if any(keyword in query_lower for keyword in allergen_keywords):
+                state.intent = "allergen_advice"
+                state.agents_to_invoke = ["allergen_agent"]
+                state.execution_mode = "sequential"
+                logger.info(f"Allergen query detected - routing to allergen_agent only")
+                return state
+            
             response = self.client.chat.completions.create(
                 model=MODEL,
                 max_tokens=300,

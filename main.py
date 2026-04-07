@@ -25,6 +25,7 @@ def main():
         "Tell me about the nutritional value of avocados",
         "What items on your menu are gluten-free?",
         "Can you recommend a dish for a romantic dinner?",
+        "I am allergic to dairy, what can I eat?"
     ]
 
     results = []

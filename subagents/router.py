@@ -125,6 +125,21 @@ class SubAgentRouter:
             )
 
         try:
+            # Check if this is a custom agent implementation
+            if agent_name == "allergen_agent":
+                from subagents.agents.allergen_agent import AllergenAgent
+                agent = AllergenAgent()
+                return agent.execute(state.reformed_query)
+            
+            # Smart routing: If dietary_agent is requested but query mentions allergies, use allergen_agent
+            if agent_name == "dietary_agent":
+                allergen_keywords = ["allerg", "intolerance", "dairy-free", "gluten-free", "nut-free", "vegan", "vegetarian"]
+                query_lower = state.reformed_query.lower()
+                if any(keyword in query_lower for keyword in allergen_keywords):
+                    from subagents.agents.allergen_agent import AllergenAgent
+                    agent = AllergenAgent()
+                    return agent.execute(state.reformed_query)
+            
             agent_desc = self.AVAILABLE_AGENTS[agent_name]
             
             # Call the agent with the query

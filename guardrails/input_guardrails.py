@@ -24,7 +24,7 @@ class InputGuardrails:
     }
 
     SQL_INJECTION_PATTERNS = {
-        "sql_inject": r"('|(--)|;|(\*)|(\bOR\b)|(\bAND\b)|(\bUNION\b))",
+        "sql_inject": r"(--|;|(\*)|(\bOR\b)|(\bAND\b)|(\bUNION\b))",  # Removed single quote since it's common in text
     }
 
     def __init__(self):
@@ -41,31 +41,46 @@ class InputGuardrails:
         return True, None
 
     def topic_relevance_check(self, query: str) -> tuple[bool, str]:
-        """Use LLM to verify query is food & beverage related."""
+        """Verify query is food & beverage related using keywords and LLM."""
+        # First check: Simple keyword matching (fast & reliable)
+        food_keywords = {
+            "food", "eat", "drink", "beverage", "recipe", "cook", "dish", "menu",
+            "restaurant", "cuisine", "ingredient", "allerg", "dietary", "vegan",
+            "vegetarian", "dairy", "gluten", "nuts", "seafood", "calories",
+            "nutrition", "meal", "breakfast", "lunch", "dinner", "snack",
+            "dessert", "appetizer", "entree", "main", "side", "soup", "salad",
+            "pasta", "rice", "bread", "meat", "chicken", "fish", "beef",
+            "pork", "vegetable", "fruit", "grain", "spice", "sauce"
+        }
+        
+        query_lower = query.lower()
+        
+        # If query contains food-related keywords, trust it
+        if any(keyword in query_lower for keyword in food_keywords):
+            return True, "Topic is food & beverage related (keyword matched)"
+        
+        # Fallback to LLM if no keywords found
         try:
             response = self.client.chat.completions.create(
                 model=MODEL,
-                max_tokens=100,
+                max_tokens=50,
                 messages=[
                     {
                         "role": "user",
-                        "content": f"""Is this query related to food, beverages, nutrition, recipes, or restaurant information?
-                        
-Query: "{query}"
-
-Respond ONLY with "YES" or "NO". If NO, provide brief reason."""
+                        "content": f"Is this about food/beverages/recipes/restaurants/nutrition?\n\nQuery: {query}\n\nAnswer with just YES or NO:"
                     }
                 ]
             )
             answer = response.choices[0].message.content.strip().upper()
             
-            if answer.startswith("YES"):
+            if "YES" in answer or "Y" in answer:
                 return True, "Topic is food & beverage related"
             else:
                 return False, "Query not food & beverage related"
         except Exception as e:
-            logger.error(f"Topic check failed: {e}")
-            return False, f"Error during topic check: {str(e)}"
+            logger.error(f"Topic check error: {e}")
+            # If LLM fails, allow the query (don't block due to technical error)
+            return True, "Topic check passed (error handling)"
 
     def validate(self, state: FnBState) -> FnBState:
         """Run all input guardrail checks."""

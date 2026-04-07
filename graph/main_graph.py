@@ -52,21 +52,21 @@ class FnBWorkflow:
 
         # Add nodes
         workflow.add_node("reform_query", self._node_reform_query)
-        workflow.add_node("input_guardrail", self._node_input_guardrail)
+        workflow.add_node("check_input_guardrail", self._node_input_guardrail)
         workflow.add_node("orchestrate", self._node_orchestrate)
-        workflow.add_node("pre_tool_guardrail", self._node_pre_tool_guardrail)
+        workflow.add_node("check_pre_tool_guardrail", self._node_pre_tool_guardrail)
         workflow.add_node("execute_agents", self._node_execute_agents)
         workflow.add_node("aggregate_response", self._node_aggregate_response)
         workflow.add_node("evaluate_answer", self._node_evaluate_answer)
-        workflow.add_node("output_guardrail", self._node_output_guardrail)
+        workflow.add_node("check_output_guardrail", self._node_output_guardrail)
         workflow.add_node("tone_of_voice", self._node_tone_of_voice)
 
         # Build edges
-        workflow.add_edge("reform_query", "input_guardrail")
+        workflow.add_edge("reform_query", "check_input_guardrail")
         
         # Input guardrail can block or pass
         workflow.add_conditional_edges(
-            "input_guardrail",
+            "check_input_guardrail",
             self._should_continue_after_input_guardrail,
             {
                 "continue": "orchestrate",
@@ -74,11 +74,11 @@ class FnBWorkflow:
             }
         )
 
-        workflow.add_edge("orchestrate", "pre_tool_guardrail")
+        workflow.add_edge("orchestrate", "check_pre_tool_guardrail")
 
         # Pre-tool guardrail validation
         workflow.add_conditional_edges(
-            "pre_tool_guardrail",
+            "check_pre_tool_guardrail",
             self._should_continue_after_pre_guardrail,
             {
                 "continue": "execute_agents",
@@ -88,11 +88,11 @@ class FnBWorkflow:
 
         workflow.add_edge("execute_agents", "aggregate_response")
         workflow.add_edge("aggregate_response", "evaluate_answer")
-        workflow.add_edge("evaluate_answer", "output_guardrail")
+        workflow.add_edge("evaluate_answer", "check_output_guardrail")
 
         # Output guardrail can redact or pass
         workflow.add_conditional_edges(
-            "output_guardrail",
+            "check_output_guardrail",
             self._should_continue_to_tone,
             {
                 "continue": "tone_of_voice",
@@ -250,11 +250,21 @@ class FnBWorkflow:
             first_result = subagent_results[0]
             output = first_result.get("output", "") if isinstance(first_result, dict) else first_result.output
             citations = first_result.get("citations", []) if isinstance(first_result, dict) else first_result.citations
-            agents_used = [
+            
+            # Deduplicate agents while preserving order
+            agents_used_raw = [
                 (r.get("agent_name", "") if isinstance(r, dict) else r.agent_name)
                 for r in subagent_results
                 if (r.get("success", False) if isinstance(r, dict) else r.success)
             ]
+            # Remove duplicates while preserving order
+            seen = set()
+            agents_used = []
+            for agent in agents_used_raw:
+                if agent not in seen:
+                    agents_used.append(agent)
+                    seen.add(agent)
+            
             response.update({
                 "status": "SUCCESS",
                 "answer": output,

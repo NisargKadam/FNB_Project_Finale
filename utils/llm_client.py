@@ -1,5 +1,9 @@
 import os
 from openai import OpenAI
+from dotenv import load_dotenv
+
+# Load environment variables from .env file
+load_dotenv()
 
 # Read model from env so it can be changed without touching code.
 # Falls back to gpt-3.5-turbo which is universally available.
