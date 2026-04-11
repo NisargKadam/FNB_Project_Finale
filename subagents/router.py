@@ -1,10 +1,15 @@
 """Subagent Router - Master orchestrator for 20+ specialized agents"""
+
 from typing import Optional, Any
 from graph.state import FnBState, SubAgentResult
 from utils.llm_client import get_client, MODEL
 import logging
 import asyncio
 from concurrent.futures import ThreadPoolExecutor
+from subagents.cuisine_agent import CuisineAgent
+from tools.tool_registry import ToolRegistry
+from rag.chroma_db import ChromaStore
+from rag.cuisine_rag_agent import CuisineRAGAgent
 
 logger = logging.getLogger(__name__)
 
@@ -13,7 +18,7 @@ class SubAgentRouter:
     """
     Master router that coordinates execution of multiple specialized subagents.
     Supports parallel and sequential execution modes.
-    
+
     Available Subagents (to be implemented):
     1. recipe_agent - Recipe search and recommendations
     2. nutrition_agent - Nutritional information queries
@@ -62,6 +67,16 @@ class SubAgentRouter:
 
     def __init__(self):
         self.client = get_client()
+        self.tool_registry = ToolRegistry()
+        chroma_store = ChromaStore()
+        chroma_store.add_pdf("data/(Book) - Cookbook - Nelson Family Recipe Book.pdf")
+        self.rag_agent = CuisineRAGAgent(
+            chroma_store=chroma_store,
+            tool_registry=self.tool_registry
+        )
+        self.cuisine_agent = CuisineAgent(
+            self.client
+        )
         self.max_workers = 5  # Parallel execution limit
 
     def process(self, state: FnBState) -> FnBState:
@@ -79,7 +94,7 @@ class SubAgentRouter:
     def _execute_sequential(self, state: FnBState) -> None:
         """Execute agents one at a time."""
         logger.info(f"Sequential execution for agents: {state.agents_to_invoke}")
-        
+
         for agent_name in state.agents_to_invoke:
             result = self._execute_agent(state, agent_name)
             if result:
@@ -88,13 +103,13 @@ class SubAgentRouter:
     def _execute_parallel(self, state: FnBState) -> None:
         """Execute agents in parallel (up to max_workers)."""
         logger.info(f"Parallel execution for agents: {state.agents_to_invoke}")
-        
+
         with ThreadPoolExecutor(max_workers=self.max_workers) as executor:
             futures = {
                 executor.submit(self._execute_agent, state, agent_name): agent_name
                 for agent_name in state.agents_to_invoke
             }
-            
+
             for future in futures:
                 try:
                     result = future.result(timeout=30)
@@ -109,25 +124,45 @@ class SubAgentRouter:
                             agent_name=agent_name,
                             output="",
                             success=False,
-                            error=str(e)
+                            error=str(e),
                         )
                     )
 
-    def _execute_agent(self, state: FnBState, agent_name: str) -> Optional[SubAgentResult]:
+    def _execute_agent(
+        self, state: FnBState, agent_name: str
+    ) -> Optional[SubAgentResult]:
         """Execute a single subagent."""
+
         if agent_name not in self.AVAILABLE_AGENTS:
             logger.warning(f"Unknown agent: {agent_name}")
             return SubAgentResult(
                 agent_name=agent_name,
                 output="",
                 success=False,
-                error=f"Agent {agent_name} not found"
+                error=f"Agent {agent_name} not found",
             )
 
         try:
+            # =========================
+            # ✅ SPECIAL HANDLING FOR CUISINE AGENT
+            # =========================
+            if agent_name == "cuisine_agent":
+                logger.info("[ORCHESTRATOR] Routing to CuisineAgent (custom logic + DDGS)")
+                rag_data = self.rag_agent.retrieve(state.reformed_query)
+
+                result = self.cuisine_agent.execute(
+                    state.reformed_query,
+                    context=rag_data
+                )
+                return result;
+
+            # =========================
+            # ✅ DEFAULT LLM FALLBACK
+            # =========================
+            logger.info(f"[ORCHESTRATOR] Routing to LLM for agent: {agent_name}")
+
             agent_desc = self.AVAILABLE_AGENTS[agent_name]
-            
-            # Call the agent with the query
+
             response = self.client.chat.completions.create(
                 model=MODEL,
                 max_tokens=1000,
@@ -135,41 +170,44 @@ class SubAgentRouter:
                     {
                         "role": "user",
                         "content": f"""You are a specialized food & beverage agent.
-Role: {agent_desc}
+    Role: {agent_desc}
 
-User Query: "{state.reformed_query}"
+    User Query: "{state.reformed_query}"
 
-Provide a comprehensive response that:
-1. Directly answers the question
-2. Includes relevant details from your expertise area
-3. Suggests related items if applicable
-4. Notes any important caveats or disclaimers
+    Provide a comprehensive response that:
+    1. Directly answers the question
+    2. Includes relevant details from your expertise area
+    3. Suggests related items if applicable
+    4. Notes any important caveats or disclaimers
 
-Be conversational but professional."""
+    Be conversational but professional.""",
                     }
-                ]
+                ],
             )
 
             output = response.choices[0].message.content.strip()
-            
+
             result = SubAgentResult(
                 agent_name=agent_name,
                 output=output,
                 success=True,
-                citations=[],  # Can be populated from RAG if needed
-                retrieval_score=1.0  # Update after RAG evaluation
+                citations=[],
+                retrieval_score=1.0,
             )
-            
             logger.info(f"Agent {agent_name} completed successfully")
+
+
             return result
 
         except Exception as e:
-            logger.error(f"Agent {agent_name} execution failed: {e}")
+             logger.error(f"Agent {agent_name} execution failed: {e}")
+
             return SubAgentResult(
                 agent_name=agent_name,
                 output="",
                 success=False,
                 error=str(e)
+                agent_name=agent_name, output="", success=False, error=str(e)
             )
 
     def get_agent_list(self) -> dict:
