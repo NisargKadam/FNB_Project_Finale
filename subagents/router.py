@@ -200,7 +200,7 @@ class SubAgentRouter:
             return result
 
         except Exception as e:
-             logger.error(f"Agent {agent_name} execution failed: {e}")
+            logger.error(f"Agent {agent_name} execution failed: {e}")
 
             return SubAgentResult(
                 agent_name=agent_name,
