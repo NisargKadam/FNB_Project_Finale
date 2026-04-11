@@ -125,9 +125,32 @@ class SubAgentRouter:
             )
 
         try:
+            if agent_name == "pricing_agent":
+                from subagents.agents.pricing_agent import PricingAgent
+                agent = PricingAgent()
+                result = agent.execute(state.reformed_query)
+                if isinstance(result, SubAgentResult):
+                    return result
+                return SubAgentResult(
+                    agent_name="pricing_agent",
+                    output=str(result),
+                    success=True
+                )
+
+            if agent_name == "allergen_agent":
+                from subagents.agents.allergen_agent import AllergenAgent
+                agent = AllergenAgent()
+                return agent.execute(state.reformed_query)
+
+            if agent_name == "dietary_agent":
+                allergen_keywords = ["allerg", "intolerance", "dairy-free", "gluten-free", "nut-free", "vegan", "vegetarian"]
+                if any(kw in state.reformed_query.lower() for kw in allergen_keywords):
+                    from subagents.agents.allergen_agent import AllergenAgent
+                    agent = AllergenAgent()
+                    return agent.execute(state.reformed_query)
+
+            # Generic LLM fallback for all other agents
             agent_desc = self.AVAILABLE_AGENTS[agent_name]
-            
-            # Call the agent with the query
             response = self.client.chat.completions.create(
                 model=MODEL,
                 max_tokens=1000,
@@ -135,33 +158,30 @@ class SubAgentRouter:
                     {
                         "role": "user",
                         "content": f"""You are a specialized food & beverage agent.
-Role: {agent_desc}
+    Role: {agent_desc}
 
-User Query: "{state.reformed_query}"
+    User Query: "{state.reformed_query}"
 
-Provide a comprehensive response that:
-1. Directly answers the question
-2. Includes relevant details from your expertise area
-3. Suggests related items if applicable
-4. Notes any important caveats or disclaimers
+    Provide a comprehensive response that:
+    1. Directly answers the question
+    2. Includes relevant details from your expertise area
+    3. Suggests related items if applicable
+    4. Notes any important caveats or disclaimers
 
-Be conversational but professional."""
+    Be conversational but professional."""
                     }
                 ]
             )
 
             output = response.choices[0].message.content.strip()
-            
-            result = SubAgentResult(
+            logger.info(f"Agent {agent_name} completed successfully")
+            return SubAgentResult(
                 agent_name=agent_name,
                 output=output,
                 success=True,
-                citations=[],  # Can be populated from RAG if needed
-                retrieval_score=1.0  # Update after RAG evaluation
+                citations=[],
+                retrieval_score=1.0
             )
-            
-            logger.info(f"Agent {agent_name} completed successfully")
-            return result
 
         except Exception as e:
             logger.error(f"Agent {agent_name} execution failed: {e}")
@@ -171,7 +191,6 @@ Be conversational but professional."""
                 success=False,
                 error=str(e)
             )
-
     def get_agent_list(self) -> dict:
         """Return list of available agents."""
         return self.AVAILABLE_AGENTS.copy()

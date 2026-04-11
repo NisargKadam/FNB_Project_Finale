@@ -49,23 +49,39 @@ class OrchestratorNode:
         """Classify intent and route to appropriate agents."""
         try:
             response = self.client.chat.completions.create(
-                model=MODEL,
-                max_tokens=300,
-                messages=[
-                    {
-                        "role": "user",
-                        "content": f"""Classify the intent of this query and suggest which agents should handle it.
+    model=MODEL,
+    max_tokens=300,
+    messages=[
+        {
+            "role": "user",
+            "content": f"""Classify the intent of this query and suggest which agents should handle it.
 
 Query: "{state.reformed_query}"
 
-Respond in this format:
-INTENT: [one of: recipe_search, nutrition_info, menu_info, recommendations, dietary_advice, other]
-AGENTS: [comma-separated list of agent names from: recipe_agent, nutrition_agent, menu_agent, recommendation_agent, dietary_agent]
+INTENT options:
+- recipe_search: user wants a recipe or cooking instructions
+- nutrition_info: user asks about calories, macros, or health info
+- menu_info: user wants to know what is on the menu
+- recommendations: user wants suggestions (no price constraint)
+- dietary_advice: user has dietary restrictions or allergies
+- pricing: user asks about cost, price, budget, or what they can get for a certain amount of money
+- other: anything else
+
+AGENT options:
+recipe_agent, nutrition_agent, menu_agent, recommendation_agent, dietary_agent, allergen_agent, pricing_agent
+
+RULES:
+- If the query contains words like "under", "below", "less than", "over", "above", "budget", "$", "afford", or any dollar amount — ALWAYS use pricing_agent and set INTENT to pricing.
+- Only pick agents relevant to the query. Usually 1 agent is enough.
+
+Respond in this exact format:
+INTENT: [intent]
+AGENTS: [comma-separated agent names]
 REASONING: [brief explanation]
 EXECUTION_MODE: [parallel or sequential]"""
-                    }
-                ]
-            )
+        }
+    ]
+)
             
             response_text = response.choices[0].message.content.strip()
             # Parse response
@@ -102,12 +118,21 @@ class ResponseAggregationNode:
         if not state.subagent_results:
             return state
 
+        successful_results = [r for r in state.subagent_results if r.success]
+
+        # Skip LLM aggregation for single results OR grounded agents
+        grounded_agents = {"pricing_agent", "allergen_agent", "inventory_agent"}
+        agents_used = {r.agent_name for r in successful_results}
+
+        if len(successful_results) == 1 or bool(agents_used & grounded_agents):
+            logger.info("Skipping LLM aggregation — single or grounded agent result")
+            return state
+
         try:
-            # Combine all results
             aggregated_results = "\n\n".join(
-                [f"From {r.agent_name}:\n{r.output}" for r in state.subagent_results if r.success]
+                [f"From {r.agent_name}:\n{r.output}" for r in successful_results]
             )
-            
+
             all_citations = []
             for r in state.subagent_results:
                 all_citations.extend(r.citations)
@@ -118,30 +143,29 @@ class ResponseAggregationNode:
                 messages=[
                     {
                         "role": "user",
-                        "content": f"""Synthesize these results into a cohesive, well-organized response:
+                        "content": f"""Synthesize these results into a cohesive, well-organized response.
+    DO NOT add any items, prices, or facts not explicitly present in the source results below.
 
-{aggregated_results}
+    {aggregated_results}
 
-Create a unified answer that:
-1. Avoids redundancy
-2. Presents information logically
-3. Maintains accuracy from source information
-4. Is written in professional but friendly tone for food & beverage context"""
+    Create a unified answer that:
+    1. Avoids redundancy
+    2. Presents information logically
+    3. Maintains accuracy from source information — do not invent or add any new items
+    4. Is written in professional but friendly tone for food & beverage context"""
                     }
                 ]
             )
 
-            # Update the first result with aggregated response
             if state.subagent_results:
                 state.subagent_results[0].output = response.choices[0].message.content.strip()
                 state.subagent_results[0].citations = all_citations
-                
+
             logger.info("Response aggregated successfully")
         except Exception as e:
             logger.error(f"Response aggregation failed: {e}")
 
         return state
-
 
 class AnswerEvaluationNode:
     """Scores response for relevance, completeness, and accuracy."""
