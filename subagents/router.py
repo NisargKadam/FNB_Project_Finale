@@ -207,7 +207,6 @@ class SubAgentRouter:
                 output="",
                 success=False,
                 error=str(e)
-                agent_name=agent_name, output="", success=False, error=str(e)
             )
 
     def get_agent_list(self) -> dict:
