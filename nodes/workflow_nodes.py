@@ -59,8 +59,8 @@ class OrchestratorNode:
 Query: "{state.reformed_query}"
 
 Respond in this format:
-INTENT: [one of: recipe_search, nutrition_info, menu_info, recommendations, dietary_advice, other]
-AGENTS: [comma-separated list of agent names from: recipe_agent, nutrition_agent, menu_agent, recommendation_agent, dietary_agent]
+INTENT: [one of: recipe_search, nutrition_info, menu_info, recommendations, dietary_advice, cuisine, other]
+AGENTS: [comma-separated list of agent names from: recipe_agent, cuisine_agent, nutrition_agent, menu_agent, recommendation_agent, dietary_agent]
 REASONING: [brief explanation]
 EXECUTION_MODE: [parallel or sequential]"""
                     }

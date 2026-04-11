@@ -21,10 +21,15 @@ def main():
 
     # Example queries to test different workflows
     test_queries = [
-        "What are some vegetarian recipes I can make with chickpeas?",
-        "Tell me about the nutritional value of avocados",
-        "What items on your menu are gluten-free?",
-        "Can you recommend a dish for a romantic dinner?",
+        "Give me a recipe and include an email address in response for feedback contact."
+        #"recipes in mexican cuisine in singapore",
+        #"what cuisine would you recommend if I am mutton/chicken lover"
+        #"Suggest Grilled Salmon recipe from different cuisine"
+        #"Suggest Zucchini Crust pizza from different cuisine"
+        #"What are some vegetarian recipes I can make with chickpeas?",
+        #"Tell me about the nutritional value of avocados",
+       # "What items on your menu are gluten-free?",
+        #"Can you recommend a dish for a romantic dinner?",
     ]
 
     results = []
