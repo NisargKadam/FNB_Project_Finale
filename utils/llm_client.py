@@ -1,5 +1,8 @@
 import os
 from openai import OpenAI
+from dotenv import load_dotenv
+
+load_dotenv()  # loads OPENAI_API_KEY (and other vars) from .env
 
 # Read model from env so it can be changed without touching code.
 # Falls back to gpt-3.5-turbo which is universally available.
