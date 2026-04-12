@@ -125,6 +125,12 @@ class SubAgentRouter:
             )
 
         try:
+            # Dispatch to implemented agents
+            if agent_name == "recipe_agent":
+                from subagents.agents.recipe_agent import RecipeAgent
+                agent = RecipeAgent()
+                return agent.execute(state.reformed_query)
+
             agent_desc = self.AVAILABLE_AGENTS[agent_name]
             
             # Call the agent with the query
