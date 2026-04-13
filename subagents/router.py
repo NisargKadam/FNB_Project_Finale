@@ -51,7 +51,7 @@ class SubAgentRouter:
         "cuisine_agent": "Cuisine type and origin info",
         "seasonal_agent": "Seasonal and local ingredients",
         "beverage_pairing_agent": "Wine and drink pairings",
-        "nutrition_calculator_agent": "Detailed nutrition calculations",
+        "nutrition_calculator_agent": "Detailed Calorie and macro calculations",
         "restaurant_info_agent": "Restaurant information",
         "order_history_agent": "Customer order history",
         "trending_agent": "Trending and popular items",
@@ -115,7 +115,24 @@ class SubAgentRouter:
 
     def _execute_agent(self, state: FnBState, agent_name: str) -> Optional[SubAgentResult]:
         """Execute a single subagent."""
-        if agent_name not in self.AVAILABLE_AGENTS:
+        if agent_name == "nutrition_calculator_agent":
+            from subagents.agents.nutrition_calculator_agent import NutritionCalculatorAgent
+            nutrition_calculator_agent = NutritionCalculatorAgent()
+            try:
+                result = nutrition_calculator_agent.execute(None, state.reformed_query)
+                if not getattr(result, "agent_name", None):
+                    result.agent_name = agent_name
+                return result
+            except Exception as e:
+                logger.error(f"Nutrition calculator failed: {e}")
+                return SubAgentResult(
+                    agent_name=agent_name,
+                    output="",
+                    success=False,
+                    error=str(e)
+                )
+
+        elif agent_name not in self.AVAILABLE_AGENTS:
             logger.warning(f"Unknown agent: {agent_name}")
             return SubAgentResult(
                 agent_name=agent_name,
@@ -124,7 +141,7 @@ class SubAgentRouter:
                 error=f"Agent {agent_name} not found"
             )
 
-        try:
+        else:
             agent_desc = self.AVAILABLE_AGENTS[agent_name]
             
             # Call the agent with the query
@@ -135,17 +152,17 @@ class SubAgentRouter:
                     {
                         "role": "user",
                         "content": f"""You are a specialized food & beverage agent.
-Role: {agent_desc}
+                        Role: {agent_desc}
 
-User Query: "{state.reformed_query}"
+                        User Query: "{state.reformed_query}"
 
-Provide a comprehensive response that:
-1. Directly answers the question
-2. Includes relevant details from your expertise area
-3. Suggests related items if applicable
-4. Notes any important caveats or disclaimers
+                        Provide a comprehensive response that:
+                        1. Directly answers the question
+                        2. Includes relevant details from your expertise area
+                        3. Suggests related items if applicable
+                        4. Notes any important caveats or disclaimers
 
-Be conversational but professional."""
+                        Be conversational but professional."""
                     }
                 ]
             )
@@ -162,15 +179,6 @@ Be conversational but professional."""
             
             logger.info(f"Agent {agent_name} completed successfully")
             return result
-
-        except Exception as e:
-            logger.error(f"Agent {agent_name} execution failed: {e}")
-            return SubAgentResult(
-                agent_name=agent_name,
-                output="",
-                success=False,
-                error=str(e)
-            )
 
     def get_agent_list(self) -> dict:
         """Return list of available agents."""
