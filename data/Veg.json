@@ -1,0 +1,72 @@
+[
+  {
+    "id": "M006",
+    "name": "Dal Makhani",
+    "category": "Main Course",
+    "cuisine": "Indian",
+    "price": 12.99,
+    "description": "Slow-cooked black lentils and kidney beans in a rich tomato-butter-cream sauce, simmered overnight for deep flavour.",
+    "ingredients": ["black lentils", "kidney beans", "tomatoes", "butter", "cream", "onions", "ginger", "garlic", "spices"],
+    "allergens": ["dairy"],
+    "dietary": ["vegetarian", "gluten-free"],
+    "available": true,
+    "prep_time_minutes": 30,
+    "spice_level": "mild"
+  },
+  {
+    "id": "M008",
+    "name": "Vegan Buddha Bowl",
+    "category": "Bowls",
+    "cuisine": "Fusion",
+    "price": 13.99,
+    "description": "Nourishing bowl with quinoa, roasted chickpeas, avocado, cucumber, edamame, shredded carrots, and tahini dressing.",
+    "ingredients": ["quinoa", "chickpeas", "avocado", "cucumber", "edamame", "carrots", "tahini", "lemon", "garlic"],
+    "allergens": ["sesame"],
+    "dietary": ["vegan", "gluten-free"],
+    "available": true,
+    "prep_time_minutes": 15,
+    "spice_level": "mild"
+  },
+  {
+    "id": "M012",
+    "name": "Pad Thai",
+    "category": "Noodles",
+    "cuisine": "Thai",
+    "price": 14.99,
+    "description": "Stir-fried rice noodles with prawns, tofu, eggs, bean sprouts, spring onions, and crushed peanuts in a tangy tamarind sauce.",
+    "ingredients": ["rice noodles", "prawns", "tofu", "eggs", "bean sprouts", "spring onions", "peanuts", "tamarind", "fish sauce", "palm sugar"],
+    "allergens": ["shellfish", "eggs", "nuts", "fish"],
+    "dietary": [],
+    "available": false,
+    "prep_time_minutes": 20,
+    "spice_level": "medium"
+  },
+  {
+    "id": "M003",
+    "name": "Margherita Pizza",
+    "category": "Pizza",
+    "cuisine": "Italian",
+    "price": 13.99,
+    "description": "Classic Neapolitan pizza with San Marzano tomato sauce, fresh mozzarella, and basil leaves on a hand-tossed thin crust.",
+    "ingredients": ["pizza dough", "San Marzano tomatoes", "fresh mozzarella", "basil", "olive oil", "sea salt"],
+    "allergens": ["gluten", "dairy"],
+    "dietary": ["vegetarian"],
+    "available": true,
+    "prep_time_minutes": 18,
+    "spice_level": "mild"
+  },
+  {
+    "id": "M001",
+    "name": "Paneer Tikka Masala",
+    "category": "Main Course",
+    "cuisine": "Indian",
+    "price": 14.99,
+    "description": "Tender paneer cubes simmered in a rich tomato-cream sauce with aromatic spices including garam masala, cumin, and coriander.",
+    "ingredients": ["paneer", "tomatoes", "onions", "heavy cream", "garam masala", "ginger", "garlic", "cumin", "coriander"],
+    "allergens": ["dairy"],
+    "dietary": ["vegetarian", "gluten-free"],
+    "available": true,
+    "prep_time_minutes": 25,
+    "spice_level": "medium"
+  }
+]

@@ -21,6 +21,8 @@ def main():
 
     # Example queries to test different workflows
     test_queries = [
+        "What is the menu available?",
+        "What are the non-vegetarian options on the menu?",
         "What are some vegetarian recipes I can make with chickpeas?",
         "Tell me about the nutritional value of avocados",
         "What items on your menu are gluten-free?",

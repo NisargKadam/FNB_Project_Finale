@@ -308,7 +308,7 @@ Router Update: subagents/router.py
     def _execute_agent(self, state: FnBState, agent_name: str):
         ...
         if agent_name == "menu_filtering_agent":
-            from subagents.agents.menu_filtering_agent import MenuFilteringAgent
+            from subagents.agents.ing_agent import MenuFilteringAgent
             agent = MenuFilteringAgent()
             filters = self._extract_filters(state.reformed_query)
             return agent.filter_menu(state.reformed_query, filters)

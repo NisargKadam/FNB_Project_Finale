@@ -24,7 +24,8 @@ class InputGuardrails:
     }
 
     SQL_INJECTION_PATTERNS = {
-        "sql_inject": r"('|(--)|;|(\*)|(\bOR\b)|(\bAND\b)|(\bUNION\b))",
+     #   "sql_inject": r"('|(--)|;|(\*)|(\bOR\b)|(\bAND\b)|(\bUNION\b))",
+         "sql_inject": r"(\bOR\b\s+\d+=\d+|\bAND\b\s+\d+=\d+|UNION\s+SELECT|--|;)",
     }
 
     def __init__(self):

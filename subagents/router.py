@@ -3,7 +3,6 @@ from typing import Optional, Any
 from graph.state import FnBState, SubAgentResult
 from utils.llm_client import get_client, MODEL
 import logging
-import asyncio
 from concurrent.futures import ThreadPoolExecutor
 
 logger = logging.getLogger(__name__)
@@ -115,7 +114,30 @@ class SubAgentRouter:
 
     def _execute_agent(self, state: FnBState, agent_name: str) -> Optional[SubAgentResult]:
         """Execute a single subagent."""
-        if agent_name not in self.AVAILABLE_AGENTS:
+        if agent_name == "menu_agent":
+            try:
+                from subagents.agents.menu_agent import MenuAgent
+                menu_agent_instance = MenuAgent()
+                output = menu_agent_instance.intelligent_query_handler(state.reformed_query)
+                result = SubAgentResult(
+                    agent_name=agent_name,
+                    output=output,
+                    success=True,
+                    citations=[],
+                    retrieval_score=1.0
+                )
+                logger.info(f"MenuAgent completed successfully")
+                return result
+            except Exception as e:
+                logger.error(f"Menu agent failed: {e}")
+                return SubAgentResult(
+                    agent_name=agent_name,
+                    output="",
+                    success=False,
+                    error=str(e)
+                )
+
+        elif agent_name not in self.AVAILABLE_AGENTS:
             logger.warning(f"Unknown agent: {agent_name}")
             return SubAgentResult(
                 agent_name=agent_name,
@@ -124,17 +146,17 @@ class SubAgentRouter:
                 error=f"Agent {agent_name} not found"
             )
 
-        try:
+        else:
             agent_desc = self.AVAILABLE_AGENTS[agent_name]
-            
+        
             # Call the agent with the query
             response = self.client.chat.completions.create(
                 model=MODEL,
                 max_tokens=1000,
                 messages=[
-                    {
-                        "role": "user",
-                        "content": f"""You are a specialized food & beverage agent.
+                {
+                    "role": "user",
+                    "content": f"""You are a specialized food & beverage agent.
 Role: {agent_desc}
 
 User Query: "{state.reformed_query}"
@@ -146,31 +168,22 @@ Provide a comprehensive response that:
 4. Notes any important caveats or disclaimers
 
 Be conversational but professional."""
-                    }
+                }
                 ]
             )
 
             output = response.choices[0].message.content.strip()
-            
+        
             result = SubAgentResult(
                 agent_name=agent_name,
                 output=output,
                 success=True,
-                citations=[],  # Can be populated from RAG if needed
-                retrieval_score=1.0  # Update after RAG evaluation
+                citations=[],
+                retrieval_score=1.0
             )
-            
+        
             logger.info(f"Agent {agent_name} completed successfully")
             return result
-
-        except Exception as e:
-            logger.error(f"Agent {agent_name} execution failed: {e}")
-            return SubAgentResult(
-                agent_name=agent_name,
-                output="",
-                success=False,
-                error=str(e)
-            )
 
     def get_agent_list(self) -> dict:
         """Return list of available agents."""
