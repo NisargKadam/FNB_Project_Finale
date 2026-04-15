@@ -38,6 +38,7 @@ class SubAgentRouter:
     """
 
     AVAILABLE_AGENTS = {
+        "preparation_time_agent" : "Cooking/prep time estimates",
         "recipe_agent": "Search and recommend recipes",
         "nutrition_agent": "Provide nutritional information",
         "menu_agent": "Find menu items and offerings",
@@ -123,6 +124,11 @@ class SubAgentRouter:
                 success=False,
                 error=f"Agent {agent_name} not found"
             )
+        if agent_name == "preparation_time_agent":
+            from subagents.agents.preparation_time_agent import preparation_time_agent
+            agent = preparation_time_agent()
+            return agent.execute(state.reformed_query)
+            
 
         try:
             agent_desc = self.AVAILABLE_AGENTS[agent_name]
