@@ -24,10 +24,8 @@ class InputGuardrails:
     }
 
     SQL_INJECTION_PATTERNS = {
-     #   "sql_inject": r"('|(--)|;|(\*)|(\bOR\b)|(\bAND\b)|(\bUNION\b))",
-         "sql_inject": r"(\bOR\b\s+\d+=\d+|\bAND\b\s+\d+=\d+|UNION\s+SELECT|--|;)",
+        "sql_inject": r"(\b(OR|AND)\b\s+\d+\s*=\s*\d+|UNION\s+SELECT|--\s|;\s*$)"
     }
-
     def __init__(self):
         self.client = get_client()
 
@@ -50,7 +48,13 @@ class InputGuardrails:
                 messages=[
                     {
                         "role": "user",
-                        "content": f"""Is this query related to food, beverages, nutrition, recipes, or restaurant information?
+                        "content": f"""You are a classifier.
+
+Decide if the query is related to food, beverages, restaurant menus, dishes, or ordering.
+
+Be LENIENT:
+- Short or broken English queries are still valid
+- Queries about "menu", "food", "dishes", "order", "eat" should be YES
                         
 Query: "{query}"
 
